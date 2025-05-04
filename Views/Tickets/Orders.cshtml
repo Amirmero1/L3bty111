@@ -1,0 +1,108 @@
+﻿@model List<My_ticket.Models.UT>
+
+<h2 class="text-center">📦 طلبات العملاء</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning text-center fw-bold mt-3">
+        🚨 لا توجد طلبات حتى الآن.
+    </div>
+}
+else
+{
+    var groupedOrders = Model.GroupBy(o => o.User.Id).ToList();
+
+    <table class="table table-striped table-hover">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>المستخدم</th>
+                <th>البريد الالكترونى</th>
+                <th>رقم الهاتف </th>
+                <th>العنوان</th>
+                <th>اللعبة</th>
+                <th>الكمية</th>
+                <th>السعر لكل وحدة</th>
+                <th>المبلغ الإجمالي</th>
+                <th>الحالة</th>
+                <th>الإجراء</th>
+                <th>التقييم ⭐</th>
+                <th>التعليق 📝</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in groupedOrders)
+            {
+                var user = group.Key; // تحسين الأداء
+                var totalPrice = group.Where(order => !order.IsRejected).Sum(order => order.Quantity * order.Ticket.Price);
+
+                foreach (var order in group)
+                {
+                    <tr class="@(order.IsPurchased ? "table-success" : order.IsRejected ? "table-danger" : "table-warning")">
+                        <td>@order.User.FullName</td>
+                        <td>@order.User.Email</td>
+                        <td>@order.User.Phone</td>
+                        <td>@order.User.Address</td>
+                        <td>@order.Ticket.Name</td>
+                        <td>@order.Quantity</td>
+                        <td>@order.Ticket.Price EGP</td>
+                        <td>@(order.Quantity * order.Ticket.Price) EGP</td>
+                        <td class="text-center">
+                            @if (order.IsRejected)
+                            {
+                                <span class="badge bg-danger">❌ مرفوض</span>
+                            }
+                            else if (order.IsPurchased)
+                            {
+                                <span class="badge bg-success">✅ تم التأكيد</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">⌛ في الانتظار</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (!order.IsPurchased && !order.IsRejected)
+                            {
+                                <form asp-action="ConfirmOrder" asp-controller="Tickets" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@order.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">✔ تأكيد</button>
+                                </form>
+
+                                <form asp-action="RejectOrder" asp-controller="Tickets" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@order.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد من رفض هذه اللعبة؟')">❌ رفض</button>
+                                </form>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (order.Ticket.Rating.HasValue)
+                            {
+                                <span class="text-warning fw-bold" data-bs-toggle="tooltip" title="@order.Ticket.ReviewComment">⭐ @order.Ticket.Rating</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (!string.IsNullOrEmpty(order.Ticket.ReviewComment))
+                            {
+                                <span>@order.Ticket.ReviewComment</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">لا يوجد تعليق</span>
+                            }
+                        </td>
+                    </tr>
+                }
+
+                <tr class="table-secondary">
+                    <td colspan="6" class="text-end fw-bold">💰 إجمالي المبلغ لهذا المستخدم:</td>
+                    <td class="fw-bold">@totalPrice EGP</td>
+                    <td colspan="3"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

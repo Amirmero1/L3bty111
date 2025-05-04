@@ -1,0 +1,276 @@
+﻿@model CreateTicketRequest
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>إنشاء لعبة جديدة</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <style>
+        /* Reset and General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #ffebef, #d6f0fa);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 5rem auto;
+            padding: 0 15px;
+        }
+
+        /* Create Game Section */
+        .create-game-section {
+            background: linear-gradient(135deg, #ff8c94, #4ecdc4);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .create-game-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            animation: wave 10s linear infinite;
+        }
+
+        keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-1440px); }
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            animation: fadeInDown 1s ease;
+        }
+
+        keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Styles */
+        .create-game-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+        .form-group:nth-child(7) { animation-delay: 0.7s; }
+        .form-group:nth-child(8) { animation-delay: 0.8s; }
+        .form-group:nth-child(9) { animation-delay: 0.9s; }
+
+        keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1rem;
+            color: #ff6b6b;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-control, .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            background: #fff;
+            color: #333;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+            outline: none;
+        }
+
+        .form-select:hover {
+            background: linear-gradient(90deg, #ffebef, #e6f9f6);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-danger {
+            font-size: 0.9rem;
+            color: #ff6b6b;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #ff6b6b, #ff8c94);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 1s;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(90deg, #ff8c94, #ff6b6b);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.5);
+        }
+
+        /* Responsive Design */
+        media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .create-game-section {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="create-game-section">
+        <div class="container">
+            <h1 class="section-title">إنشاء لعبة جديدة</h1>
+            <div class="create-game-form">
+                <form method="post" asp-action="Create" asp-controller="Tickets">
+                    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Name">اسم اللعبة</label>
+                        <input class="form-control" asp-for="Name">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Details">التفاصيل</label>
+                        <input class="form-control" asp-for="Details">
+                        <span asp-validation-for="Details" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Price">السعر</label>
+                        <input class="form-control" asp-for="Price">
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ImageUrl">رابط الصورة الرئيسية</label>
+                        <input class="form-control" asp-for="ImageUrl">
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Image1">رابط الصورة الأولى</label>
+                        <input class="form-control" asp-for="Image1">
+                        <span asp-validation-for="Image1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Image2">رابط الصورة الثانية</label>
+                        <input class="form-control" asp-for="Image2">
+                        <span asp-validation-for="Image2" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Quantity">الكمية</label>
+                        <input type="number" class="form-control" asp-for="Quantity" min="1" value="1">
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="typeCategory">نوع اللعبة</label>
+                        <select id="typeCategory" class="form-select" asp-for="Type">
+                            <option value="learning">تعليمية</option>
+                            <option value="thinking">تفكير</option>
+                            <option value="entertainment">ترفيهية</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ageCategory">الفئة العمرية</label>
+                        <select id="ageCategory" class="form-select" asp-for="Age">
+                            <option value="0-1">من 0-1 سنة</option>
+                            <option value="1-2">من 1 سنة - سنتين</option>
+                            <option value="2-3">من 2-3 سنوات</option>
+                            <option value="3-5">من 3-5 سنوات</option>
+                            <option value="5-8">من 5-8 سنوات</option>
+                            <option value="8">من 8 سنوات</option>
+                            <option value="adults">ألعاب كبار</option>
+                        </select>
+                        <span asp-validation-for="Age" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> إرسال
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    const submitBtn = this.querySelector('.submit-btn');
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<div class="loading-spinner"></div> جاري الإرسال...';
+                    submitBtn.disabled = true;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+﻿@model CompleteProfileViewModel
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4">
+                <h2 class="text-center mb-4">أكمل ملفك الشخصي</h2>
+                <form asp-action="CompleteProfile" method="post">
+                    <input type="hidden" asp-for="Email" />
+
+                    <div class="mb-3">
+                        <label class="form-label">رقم الهاتف:</label>
+                        <input type="text" asp-for="Phone" class="form-control" required placeholder="أدخل رقم هاتفك" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">كلمة المرور:</label>
+                        <input type="password" asp-for="Password" class="form-control" required placeholder="أدخل كلمة المرور" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">العنوان:</label>
+                        <input type="text" asp-for="Address" class="form-control" required placeholder="أدخل عنوانك" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">حفظ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

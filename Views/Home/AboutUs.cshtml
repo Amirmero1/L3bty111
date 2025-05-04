@@ -1,0 +1,264 @@
+﻿@{
+    ViewData["Title"] = "من نحن";
+}
+
+<style>
+    /* Reset and General Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Cairo', sans-serif;
+        background: linear-gradient(135deg, #ffebef, #d6f0fa);
+        color: #333;
+        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    /* About Section */
+    .about-section {
+        padding: 5rem 0;
+        background: linear-gradient(135deg, #ff8c94, #4ecdc4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .about-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+        animation: wave 10s linear infinite;
+    }
+
+    keyframes wave {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-1440px); }
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        color: #fff;
+        text-align: center;
+        margin-bottom: 1rem;
+        position: relative;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        animation: fadeInDown 1s ease;
+    }
+
+    keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-lead {
+        font-size: 1.2rem;
+        color: #ffebef;
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fadeInUp 1s ease 0.5s forwards;
+        opacity: 0;
+    }
+
+    keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Image Section */
+    .about-image-container {
+        position: relative;
+        text-align: center;
+        animation: fadeInLeft 1s ease;
+    }
+
+    .about-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .about-image:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    keyframes fadeInLeft {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Card Styles */
+    .about-card {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeInRight 1s ease;
+    }
+
+    .about-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    keyframes fadeInRight {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .about-card h4 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .about-card.vision h4 {
+        color: #ff6b6b;
+    }
+
+    .about-card.values h4 {
+        color: #4ecdc4;
+    }
+
+    .about-card.mission h4 {
+        color: #ffc107;
+    }
+
+    .about-card.why-us h4 {
+        color: #ff8c94;
+    }
+
+    .about-card p {
+        font-size: 1rem;
+        color: #777;
+        line-height: 1.6;
+    }
+
+    .about-card ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .about-card ul li {
+        font-size: 1rem;
+        color: #777;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 0;
+        animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .about-card ul li:nth-child(1) { animation-delay: 0.2s; }
+    .about-card ul li:nth-child(2) { animation-delay: 0.4s; }
+    .about-card ul li:nth-child(3) { animation-delay: 0.6s; }
+    .about-card ul li:nth-child(4) { animation-delay: 0.8s; }
+
+    .about-card i {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .about-card:hover i {
+        transform: scale(1.2);
+    }
+
+    /* Responsive Design */
+    media (max-width: 768px) {
+        .section-title {
+            font-size: 2rem;
+        }
+
+        .section-lead {
+            font-size: 1rem;
+        }
+
+        .about-image {
+            margin-bottom: 2rem;
+        }
+
+        .about-card {
+            margin-bottom: 2rem;
+        }
+    }
+</style>
+
+<section class="about-section">
+    <div class="container">
+        <h2 class="section-title">من نحن</h2>
+        <p class="section-lead">
+            نحن فريق متخصص في تقديم أفضل الألعاب التعليمية والترفيهية للأطفال، حيث نهدف إلى تعزيز قدراتهم الذهنية
+            والإبداعية من خلال ألعاب ممتعة ومبتكرة تساعدهم على التعلم والنمو بطريقة ممتعة وآمنة.
+        </p>
+
+        <div class="row align-items-center mt-5">
+            <div class="col-md-6">
+                <div class="about-image-container">
+                    <img src="~/css/ll.jpg" class="about-image" alt="من نحن">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="about-card vision">
+                    <h4><i class="fas fa-eye"></i> رؤيتنا</h4>
+                    <p>
+                        نطمح لأن نكون الرواد في تقديم الألعاب التعليمية والترفيهية التي تلهم الأطفال وتحفزهم على الاكتشاف والتعلم.
+                        نحن نؤمن بأن اللعب هو أداة تعليمية قوية تساعد على تطوير المهارات الحركية والاجتماعية والعقلية للأطفال.
+                    </p>
+                </div>
+                <div class="about-card values mt-4">
+                    <h4><i class="fas fa-star"></i> قيمنا</h4>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> الجودة: نقدم منتجات عالية الجودة لضمان تجربة لعب آمنة وتعليمية.</li>
+                        <li><i class="fas fa-check-circle"></i> الأمان: نحرص على استخدام مواد صديقة للبيئة وآمنة للأطفال.</li>
+                        <li><i class="fas fa-check-circle"></i> الابتكار: نبتكر ألعابًا جديدة تتماشى مع احتياجات الأطفال في العصر الحديث.</li>
+                        <li><i class="fas fa-check-circle"></i> التفاعل: نشجع على اللعب التفاعلي لتنمية المهارات الاجتماعية للأطفال.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="about-card mission">
+                    <h4><i class="fas fa-rocket"></i> مهمتنا</h4>
+                    <p>
+                        نعمل على توفير مجموعة متنوعة من الألعاب التي تدمج بين التعلم والمرح، مما يساعد الأطفال على تنمية مهاراتهم في بيئة ترفيهية مميزة.
+                        كما نهدف إلى تطوير ألعاب تساعد الأطفال على التفكير النقدي، وتنمية مهاراتهم الإبداعية، وتعزيز التعاون والتفاعل الاجتماعي بينهم.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="about-card why-us">
+                    <h4><i class="fas fa-users"></i> لماذا نحن؟</h4>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> خبرة طويلة في تطوير الألعاب التعليمية والترفيهية.</li>
+                        <li><i class="fas fa-check-circle"></i> التزام تام بالجودة والأمان.</li>
+                        <li><i class="fas fa-check-circle"></i> تشكيلة واسعة تناسب جميع الفئات العمرية.</li>
+                        <li><i class="fas fa-check-circle"></i> دعم فني مستمر واستجابة سريعة لاستفسارات العملاء.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- تضمين مكتبة Font Awesome للأيقونات -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

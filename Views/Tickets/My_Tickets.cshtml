@@ -1,0 +1,307 @@
+﻿@model List<Ticket>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #ff8c94, #4b2e83);
+        --primary-color: #ff6b6b;
+        --secondary-color: #4b2e83;
+        --text-color: #333;
+        --light-bg: #f8f9fa;
+    }
+
+    .col-lg-4 h3,
+    .col-lg-4 h5 {
+        color: var(--secondary-color);
+    }
+
+    .col-lg-4 p {
+        color: var(--text-color);
+    }
+
+    body {
+        background-color: var(--light-bg);
+        font-family: 'Arial', sans-serif;
+    }
+
+    h1, h3, h5, h6 {
+        color: var(--secondary-color);
+    }
+
+    .card {
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        border: 2px solid transparent;
+        background: white;
+        background: linear-gradient(white, white) padding-box, var(--primary-gradient) border-box;
+    }
+
+    .ticket-quantity {
+        text-align: center;
+        border: 2px solid var(--primary-color);
+        border-radius: 8px;
+        width: 50px;
+        font-weight: bold;
+        color: var(--secondary-color);
+    }
+
+    .btn-plus, .btn-minus {
+        background: var(--primary-gradient);
+        color: white;
+        border-radius: 8px;
+        padding: 6px 10px;
+        border: none;
+        transition: 0.3s;
+    }
+
+        .btn-plus:hover, .btn-minus:hover {
+            background: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+    .remove-ticket i {
+        color: var(--primary-color);
+        transition: 0.3s;
+    }
+
+    .remove-ticket:hover i {
+        color: #d63031;
+    }
+
+    .row.mb-4 {
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        background: white;
+        background: linear-gradient(white, white) padding-box, var(--primary-gradient) border-box;
+        margin-bottom: 20px;
+    }
+
+    #register-btn {
+        background: var(--primary-gradient);
+        border-radius: 10px;
+        font-size: 1.2rem;
+        padding: 12px;
+        transition: 0.3s;
+        color: white;
+    }
+
+        #register-btn:hover {
+            background: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+    .col-lg-4 {
+        border-radius: 15px;
+        padding: 15px;
+        background: var(--primary-gradient);
+        color: white;
+    }
+
+        .col-lg-4 h3,
+        .col-lg-4 h5 {
+            color: white;
+        }
+
+        .col-lg-4 p {
+            color: white;
+        }
+
+        .col-lg-4 .form-select {
+            background-color: white;
+            color: var(--secondary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+    hr {
+        border-top: 2px solid var(--primary-color);
+    }
+
+    .col-lg-4 .text-uppercase {
+        color: white;
+    }
+
+    .col-lg-4 .form-select option {
+        color: var(--secondary-color);
+    }
+</style>
+<section class="h-100">
+    <div class="container-fluid py-3 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+                <div class="container-fluid p-3">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <div class="col-lg-8">
+                                <div class="p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-5">
+                                        <h1 class="fw-bold mb-0">Shopping Cart</h1>
+                                    </div>
+                                    <hr class="my-4">
+                                    @foreach (var ticket in Model)
+                                    {
+                                        <div class="row mb-4 d-flex justify-content-between align-items-center" id="ticket-@ticket.Id">
+                                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                                <img src="@ticket.ImageUrl" class="img-fluid rounded-3" alt="Ticket">
+                                            </div>
+                                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                                <h6 class="text-muted">@ticket.Type</h6>
+                                                <h6 class="mb-0">@ticket.Name</h6>
+                                            </div>
+                                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex align-items-center">
+                                                <button class="btn btn-link px-2 btn-minus" data-id="@ticket.Id">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <input type="text" class="form-control form-control-sm text-center ticket-quantity" value="@ticket.Quantity" data-id="@ticket.Id" readonly />
+                                                <button class="btn btn-link px-2 btn-plus" data-id="@ticket.Id">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 col-lg-2 col-xl-2 d-flex align-items-center">
+                                                <h6 class="mb-0 me-3 ticket-price" data-price="@ticket.Price">@ticket.Price EGP</h6>
+                                                <button class="remove-ticket" data-id="@ticket.Id" style="border: none; background: none;">
+                                                    <i class="fa-solid fa-trash" style="font-size: 24px; color: black;"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr class="my-4">
+                                    }
+                                    <div class="pt-5 d-flex justify-content-between">
+                                        <h6 class="mb-0"><a href="/Tickets/Index" class="text-body"><i class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
+                                        @if (Model.Any())
+                                        {
+                                            <a href="/Tickets/Review/@Model.First().Id" class="btn btn-warning">
+                                                ✨ تقييم طلبك
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 bg-light">
+                                <div class="p-3">
+                                    <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                                    <hr class="my-4">
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h5 class="text-uppercase">items <span id="total-items">@Model.Count</span></h5>
+                                        <h5><span id="total-price">@Model.Sum(t => t.Price * t.Quantity)</span> EGP</h5>
+                                    </div>
+                                    <h5 class="text-uppercase mb-3">Shipping</h5>
+                                    <div class="mb-4 pb-2">
+                                        <select class="form-select">
+                                            <option value="5">Standard-Delivery - 5.00 EGP</option>
+                                        </select>
+                                    </div>
+                                    <hr class="my-4">
+                                    <div class="d-flex justify-content-between mb-5">
+                                        <h5 class="text-uppercase">Total price</h5>
+                                        <h5><span id="grand-total">@(@Model.Sum(t => t.Price * t.Quantity) + 5.00)</span> EGP</h5>
+                                    </div>
+                                    <a href="/Tickets/Track" class="btn btn-dark btn-block btn-lg" id="register-btn">Register</a>
+                                    <p id="empty-cart-message" class="text-danger mt-3" style="display: none;">⚠ سلة المشتريات فارغة</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let registerBtn = document.getElementById("register-btn");
+        let emptyCartMessage = document.getElementById("empty-cart-message");
+
+        registerBtn.addEventListener("click", function (event) {
+            let cartItems = document.querySelectorAll(".row.mb-4");
+            if (cartItems.length === 0) {
+                event.preventDefault();
+                emptyCartMessage.style.display = "block";
+            }
+        });
+
+        function updateCartSummary() {
+            let totalItems = 0;
+            let totalPrice = 0;
+            document.querySelectorAll(".ticket-quantity").forEach(input => {
+                let quantity = parseInt(input.value);
+                let price = parseFloat(input.closest(".row").querySelector(".ticket-price").getAttribute("data-price"));
+                totalItems += quantity;
+                totalPrice += quantity * price;
+            });
+            document.getElementById("total-items").textContent = totalItems;
+            document.getElementById("total-price").textContent = totalPrice.toFixed(2);
+            document.getElementById("grand-total").textContent = (totalPrice + 5).toFixed(2);
+        }
+
+        function updateQuantity(ticketId, newQuantity) {
+            fetch(`/Tickets/UpdateQuantity?id=${ticketId}&quantity=${newQuantity}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert("❌ فشل في تحديث الكمية!");
+                    }
+                })
+                .catch(error => console.error("Error updating quantity:", error));
+        }
+
+        document.querySelectorAll(".btn-plus").forEach(button => {
+            button.addEventListener("click", function () {
+                let ticketId = this.getAttribute("data-id");
+                let inputField = document.querySelector(`.ticket-quantity[data-id='${ticketId}']`);
+                let currentValue = parseInt(inputField.value);
+
+                inputField.value = currentValue + 1;
+                updateCartSummary();
+                updateQuantity(ticketId, currentValue + 1);
+            });
+        });
+
+        document.querySelectorAll(".btn-minus").forEach(button => {
+            button.addEventListener("click", function () {
+                let ticketId = this.getAttribute("data-id");
+                let inputField = document.querySelector(`.ticket-quantity[data-id='${ticketId}']`);
+                let currentValue = parseInt(inputField.value);
+
+                if (currentValue > 1) {
+                    inputField.value = currentValue - 1;
+                    updateCartSummary();
+                    updateQuantity(ticketId, currentValue - 1);
+                }
+            });
+        });
+
+        document.querySelectorAll('.remove-ticket').forEach(button => {
+            button.addEventListener('click', function () {
+                let ticketId = this.getAttribute('data-id');
+                let ticketElement = document.getElementById(`ticket-${ticketId}`);
+
+                ticketElement.style.opacity = "0";
+                setTimeout(() => ticketElement.remove(), 300);
+                fetch(`/Tickets/RemoveFromCart/${ticketId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            alert("حدث خطأ أثناء الحذف، يرجى المحاولة مرة أخرى.");
+                            location.reload();
+                        } else {
+                            updateCartSummary();
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("تم الحذف");
+                        location.reload();
+                    });
+            });
+        });
+    });
+</script>

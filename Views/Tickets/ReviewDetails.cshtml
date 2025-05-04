@@ -1,0 +1,26 @@
+﻿@model My_ticket.Models.Ticket
+
+<section class="vh-100 gradient-custom-2">
+    <div class="container-fluid py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-8">
+                <div class="card shadow-lg p-4">
+                    <div class="text-center">
+                        <h1 class="fw-bold">✅ تم إرسال تقييمك بنجاح</h1>
+                        <p class="text-muted">شكرًا لمساهمتك في تحسين تجربتنا!</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h4>⭐ تقييمك: @Model.Rating</h4>
+                        <p><strong>تعليقك:</strong> @Model.ReviewComment</p>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="/Tickets/Index" class="btn btn-primary px-4 py-2 fw-bold">العودة إلى الالعاب</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

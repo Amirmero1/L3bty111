@@ -1,0 +1,761 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+@model List<My_ticket.Models.Ticket>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Ticket - ألعاب تعليمية للأطفال</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .game-card {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .game-image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .game-header, .game-footer {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .game-card .game-title {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .game-card .current-price {
+            font-size: 1.1rem;
+        }
+
+        .game-card .cart-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header fun-theme">
+        <div class="fun-decorations">
+            <div class="balloon balloon-1"></div>
+            <div class="balloon balloon-2"></div>
+            <div class="balloon balloon-3"></div>
+            <div class="cloud cloud-1"></div>
+            <div class="cloud cloud-2"></div>
+            <div class="star star-1"></div>
+            <div class="star star-2"></div>
+            <div class="star star-3"></div>
+        </div>
+
+        <div class="header-content">
+            <div class="logo-animation-large">
+                <svg class="logo-svg" viewBox="0 0 100 100">
+                    <circle class="logo-circle" cx="50" cy="50" r="45" />
+                    <circle class="logo-eye1" cx="35" cy="40" r="8" />
+                    <circle class="logo-eye2" cx="65" cy="40" r="8" />
+                    <path class="logo-smile" d="M30,60 Q50,80 70,60" fill="none" stroke-width="5" stroke-linecap="round" />
+                </svg>
+            </div>
+            <h1>
+                ألعاب تعليمية للأطفال
+                <span>بطابع مصري فريد</span>
+            </h1>
+            <p class="header-subtitle">نقدم ألعاباً تعليمية مبتكرة تجمع بين المتعة والتعلم، مستوحاة من الحضارة المصرية العريقة لتنمية مهارات طفلك بأسلوب ممتع وفريد</p>
+
+            <div class="header-cta">
+                <a href="#games" class="cta-button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="7.5 4.21 12 6.81 16.5 4.21"></polyline>
+                        <polyline points="7.5 19.79 7.5 14.6 3 12"></polyline>
+                        <polyline points="21 12 16.5 14.6 16.5 19.79"></polyline>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    تصفح الألعاب
+                </a>
+                <a href="/Home/AboutUs" class="cta-button secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                        <path d="M12 8v4"></path>
+                        <path d="M12 16h.01"></path>
+                    </svg>
+                    تعرف على البرنامج
+                </a>
+            </div>
+        </div>
+
+        <div class="header-wave">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+                <path fill="#ffffff" fill-opacity="1" d="M0,32L60,42.7C120,53,240,75,360,74.7C480,75,600,53,720,42.7C840,32,960,32,1080,37.3C1200,43,1320,53,1380,58.7L1440,64L1440,100L1380,100C1320,100,1200,100,1080,100C960,100,840,100,720,100C600,100,480,100,360,100C240,100,120,100,60,100L0,100Z"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- Age Recommender Tool -->
+    <section id="age-recommender" class="age-recommender">
+        <div class="container">
+            <h2 class="section-title">أداة اختيار الألعاب المناسبة</h2>
+
+            <div class="age-recommender-container">
+                <div class="age-slider-container">
+                    <label for="ageSlider" class="age-slider-label">عمر الطفل: <span id="ageValue">3-5</span></label>
+                    <input type="range" id="ageSlider" class="age-slider" min="0" max="6" value="3" aria-label="عمر الطفل">
+                    <div class="age-marks">
+                        <span>0-1</span>
+                        <span>1-2</span>
+                        <span>2-3</span>
+                        <span>3-5</span>
+                        <span>5-8</span>
+                        <span>8+</span>
+                        <span>adults</span>
+                    </div>
+                </div>
+
+                <div class="skill-selector">
+                    <h3>المهارات المطلوب تنميتها</h3>
+                    <div class="skill-checkboxes">
+                        <label class="skill-checkbox">
+                            <input type="checkbox" name="skill" value="learning" checked>
+                            <span class="checkbox-custom"></span>
+                            تعليمية
+                        </label>
+                        <label class="skill-checkbox">
+                            <input type="checkbox" name="skill" value="thinking">
+                            <span class="checkbox-custom"></span>
+                            تفكير
+                        </label>
+                        <label class="skill-checkbox">
+                            <input type="checkbox" name="skill" value="entertainment">
+                            <span class="checkbox-custom"></span>
+                            ترفيهية
+                        </label>
+                    </div>
+                </div>
+
+                <button id="recommendBtn" class="recommend-btn">
+                    <svg class="magic-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                    اقتراح الألعاب المناسبة
+                </button>
+            </div>
+
+            <div id="recommendationsContainer" class="recommendations-container">
+                <h3>الألعاب المقترحة</h3>
+                <div id="recommendationsGrid" class="recommendations-grid">
+                    <!-- سيتم ملء هذا القسم ديناميكياً بواسطة JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section id="games" class="games-section">
+        <div class="container">
+            <h2 class="section-title">الألعاب </h2>
+
+            <div class="games-header">
+                <div class="games-filter">
+                    <div class="filter-group">
+                        <label for="ageFilter">العمر:</label>
+                        <select id="ageFilter" class="filter-select">
+                            <option value="all">جميع الأعمار</option>
+                            <option value="0-1">0-1 سنة</option>
+                            <option value="1-2">1-2 سنة</option>
+                            <option value="2-3">2-3 سنوات</option>
+                            <option value="3-5">3-5 سنوات</option>
+                            <option value="5-8">5-8 سنوات</option>
+                            <option value="8+">8+ سنوات</option>
+                            <option value="adults">الكبار</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="skillFilter">النوع:</label>
+                        <select id="skillFilter" class="filter-select">
+                            <option value="all">جميع الأنواع</option>
+                            <option value="learning">تعليمية</option>
+                            <option value="thinking">تفكير</option>
+                            <option value="entertainment">ترفيهية</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="games-grid" id="gamesGrid">
+            </div>
+
+            <div class="pagination" id="pagination">
+                <button class="pagination-btn" id="prevPage" aria-label="الصفحة السابقة">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <div class="pagination-numbers" id="paginationNumbers">
+                    <button class="pagination-number active">1</button>
+                    <button class="pagination-number">2</button>
+                    <button class="pagination-number">3</button>
+                </div>
+                <button class="pagination-btn" id="nextPage" aria-label="الصفحة التالية">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <h2 class="section-title">فوائد الألعاب التعليمية</h2>
+            <div class="benefits-container">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="benefit-title">تنمية التفكير</h3>
+                    <p class="benefit-desc">تساعد الألعاب التعليمية على تنمية مهارات التفكير المنطقي وحل المشكلات لدى الأطفال.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg>
+                    </div>
+                    <h3 class="benefit-title">تنمية المهارات الحركية</h3>
+                    <p class="benefit-desc">تساهم الألعاب في تنمية المهارات الحركية الدقيقة والتناسق بين العين واليد.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="benefit-title">تنمية اللغة</h3>
+                    <p class="benefit-desc">تساعد الألعاب التعليمية على إثراء الحصيلة اللغوية وتنمية مهارات التواصل لدى الأطفال.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3 class="benefit-title">تنمية المهارات الاجتماعية</h3>
+                    <p class="benefit-desc">تعلم الألعاب الجماعية الأطفال مهارات التعاون والمشاركة واحترام القواعد.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section fun-theme">
+        <div class="container">
+            <h2 class="section-title">اتصل بنا</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>معلومات التواصل</h3>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <svg class="contact-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span><strong>العنوان</strong><br>المنوفية-شبين الكوم</span>
+                        </div>
+                        <div class="contact-item">
+                            <svg class="contact-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span><strong>الهاتف</strong><br>+20 2 76448414</span>
+                        </div>
+                        <div class="contact-item">
+                            <svg class="contact-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <span><strong>البريد الإلكتروني</strong><br>info@l3bty.com</span>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="فيسبوك"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                        <a href="#" class="social-link" aria-label="تويتر"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+                        <a href="#" class="social-link" aria-label="انستغرام"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>راسلنا</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name"><span class="required">*</span> الاسم</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><span class="required">*</span> البريد الإلكتروني</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject"><span class="required">*</span> الموضوع</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message"><span class="required">*</span> الرسالة</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">إرسال</span>
+                            <span class="btn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript Files -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/games.js"></script>
+    <script>
+        const isAuthenticated = @Html.Raw(Json.Serialize(User.Identity?.IsAuthenticated ?? false));
+        document.addEventListener('DOMContentLoaded', function () {
+            const games = @Html.Raw(Json.Serialize(Model.Select(t => new
+            {
+                id = t.Id,
+                name = t.Name,
+                age = t.Age,
+                type = t.Type,
+                price = t.Price,
+                imageUrls = new[] { t.ImageUrl, t.Image1, t.Image2 }.Where(img => !string.IsNullOrWhiteSpace(img)).ToList(),
+                isRejected = (ViewBag.UTS as List<My_ticket.Models.UT>)?.FirstOrDefault(u => u.TicketId == t.Id)?.IsRejected ?? false,
+                isPurchased = (ViewBag.UTS as List<My_ticket.Models.UT>)?.FirstOrDefault(u => u.TicketId == t.Id)?.IsPurchased ?? false,
+                isInCart = (ViewBag.Cart as List<My_ticket.Models.Ticket>)?.Any(c => c.Id == t.Id) ?? false
+            })));
+
+            const gamesPerPage = 9;
+            let currentPage = 1;
+            let filteredGames = [...games];
+            const maxVisiblePages = 3;
+
+            const gamesGrid = document.getElementById('gamesGrid');
+            const paginationNumbers = document.getElementById('paginationNumbers');
+            const prevPageBtn = document.getElementById('prevPage');
+            const nextPageBtn = document.getElementById('nextPage');
+
+            function renderGames(page) {
+                gamesGrid.innerHTML = '';
+                const start = (page - 1) * gamesPerPage;
+                const end = start + gamesPerPage;
+                const gamesToShow = filteredGames.slice(start, end);
+
+                gamesToShow.forEach((game, index) => {
+                    const gameCard = document.createElement('div');
+                    gameCard.className = 'game-card';
+                    gameCard.setAttribute('data-category', game.age);
+                    gameCard.setAttribute('data-type', game.type);
+
+                    let carouselItems = game.imageUrls.length > 0
+                        ? game.imageUrls.map((url, imgIndex) => `
+                                            <div class="carousel-item ${imgIndex === 0 ? 'active' : ''}">
+                                                <img src="${url.trim()}" alt="${game.name} Image ${imgIndex + 1}" loading="lazy">
+                                            </div>
+                                        `).join('')
+                        : `<div class="carousel-item active">
+                                            <img src="https://via.placeholder.com/300x200?text=لا+توجد+صور" alt="No Image Available" loading="lazy">
+                                        </div>`;
+
+                    gameCard.innerHTML = `
+                                        <div class="game-image-container">
+                                            <div id="carousel-${game.id}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                                                <div class="carousel-inner">
+                                                    ${carouselItems}
+                                                </div>
+                                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${game.id}" data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Previous</span>
+                                                </button>
+                                                <button class="carousel-control-next" type="button" data-bs-target="#carousel-${game.id}" data-bs-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Next</span>
+                                                </button>
+                                            </div>
+                                            ${game.isRejected ? `<span class="stock-badge out-of-stock">نفذت الكمية</span>` : ''}
+                                        </div>
+                                        <div class="game-header">
+                                            <div class="game-title-row">
+                                                <h3 class="game-title">${game.name}</h3>
+                                                <span class="age-badge">${game.age}</span>
+                                            </div>
+                                            <a href="/Tickets/Details/${game.id}" class="video-btn">عرض التفاصيل</a>
+                                        </div>
+                                        <div class="game-footer">
+                                            <div class="game-price">
+                                                <span class="current-price">${game.price} جنيه</span>
+                                            </div>
+                                            <a href="javascript:void(0);" class="add-to-cart cart-btn" data-id="${game.id}" data-incart="${game.isInCart}">
+                                                ${game.isRejected ? `<span>نفذت الكمية</span>` : game.isPurchased ? `<span>تم الشراء</span>` : game.isInCart ? `<span>✅ تمت الإضافة</span>` : `<span>أضف للسلة</span>`}
+                                            </a>
+                                        </div>
+                                    `;
+                    gamesGrid.appendChild(gameCard);
+                });
+
+                attachCartButtonListeners();
+            }
+
+            function renderPagination() {
+                const totalPages = Math.ceil(filteredGames.length / gamesPerPage);
+                paginationNumbers.innerHTML = '';
+
+                let startPage = Math.max(1, currentPage - 1);
+                let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+                if (endPage - startPage + 1 < maxVisiblePages) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `pagination-number ${i === currentPage ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        renderGames(currentPage);
+                        renderPagination();
+                        window.scrollTo({ top: document.querySelector('.games-section').offsetTop - 100, behavior: 'smooth' });
+                    });
+                    paginationNumbers.appendChild(pageBtn);
+                }
+
+                prevPageBtn.disabled = currentPage === 1;
+                nextPageBtn.disabled = currentPage === totalPages;
+            }
+
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderGames(currentPage);
+                    renderPagination();
+                    window.scrollTo({ top: document.querySelector('.games-section').offsetTop - 100, behavior: 'smooth' });
+                }
+            });
+
+            nextPageBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredGames.length / gamesPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderGames(currentPage);
+                    renderPagination();
+                    window.scrollTo({ top: document.querySelector('.games-section').offsetTop - 100, behavior: 'smooth' });
+                }
+            });
+
+            renderGames(currentPage);
+            renderPagination();
+
+            const ageFilter = document.getElementById('ageFilter');
+            const skillFilter = document.getElementById('skillFilter');
+
+            if (ageFilter && skillFilter) {
+                ageFilter.addEventListener('change', filterGames);
+                skillFilter.addEventListener('change', filterGames);
+            }
+
+            function filterGames() {
+                const selectedAge = ageFilter.value;
+                const selectedSkill = skillFilter.value;
+
+                filteredGames = games.filter(game => {
+                    const ageMatch = selectedAge === 'all' || game.age === selectedAge;
+                    const skillMatch = selectedSkill === 'all' || game.type === selectedSkill;
+                    return ageMatch && skillMatch;
+                });
+
+                currentPage = 1;
+                renderGames(currentPage);
+                renderPagination();
+            }
+
+            function attachCartButtonListeners() {
+                document.querySelectorAll('.cart-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        let ticketId = this.getAttribute('data-id');
+                        let buttonText = this;
+
+                        if (buttonText.innerText.includes('نفذت الكمية') || buttonText.innerText.includes('تم الشراء')) {
+                            alert('⚠️ لا يمكنك إضافة هذه اللعبة إلى السلة.');
+                            return;
+                        }
+
+                        if (!isAuthenticated) {
+                            alert('يرجى تسجيل الدخول لإضافة اللعبة إلى السلة.');
+                            window.location.href = `/Account/Login?returnUrl=${encodeURIComponent(`/Tickets/AddToCart/${ticketId}`)}`;
+                            return;
+                        }
+
+                        fetch(`/Tickets/AddToCart/${ticketId}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' }
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    buttonText.innerHTML = '✅ تمت الإضافة';
+                                    const cartCount = document.querySelector('.cart-count');
+                                    if (cartCount) {
+                                        cartCount.textContent = Number.parseInt(cartCount.textContent) + 1;
+                                    }
+                                } else {
+                                    alert('⚠️ ' + data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('❌ حدث خطأ، يرجى المحاولة مرة أخرى.');
+                            });
+                    });
+                });
+            }
+
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+                const savedTheme = localStorage.getItem('theme');
+
+                if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+                    document.body.classList.add('dark');
+                }
+
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark');
+                    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+                });
+            }
+
+            const ageSlider = document.getElementById('ageSlider');
+            const ageValue = document.getElementById('ageValue');
+            const recommendBtn = document.getElementById('recommendBtn');
+            const recommendationsContainer = document.getElementById('recommendationsContainer');
+
+            if (ageSlider && ageValue) {
+                const ageRanges = ['0-1', '1-2', '2-3', '3-5', '5-8', '8+', 'adults'];
+                ageSlider.addEventListener('input', function () {
+                    ageValue.textContent = ageRanges[this.value];
+                });
+            }
+
+            if (recommendBtn && recommendationsContainer) {
+                recommendBtn.addEventListener('click', function () {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<div class="loading-spinner"></div> جاري البحث...';
+                    this.disabled = true;
+
+                    setTimeout(() => {
+                        recommendationsContainer.classList.add('active');
+                        generateRecommendations();
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                        recommendationsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 1500);
+                });
+            }
+
+            function generateRecommendations() {
+                const ageRanges = ['0-1', '1-2', '2-3', '3-5', '5-8', '8+', 'adults'];
+                const selectedAge = ageRanges[ageSlider.value];
+                const selectedSkills = Array.from(document.querySelectorAll('.skill-checkbox input:checked')).map(cb => cb.value);
+                const recommendationsGrid = document.getElementById('recommendationsGrid');
+
+                if (!recommendationsGrid) return;
+
+                recommendationsGrid.innerHTML = '';
+
+                const filteredGames = games.filter(game => {
+                    const ageMatch = game.age === selectedAge;
+                    const skillMatch = selectedSkills.length === 0 || selectedSkills.includes(game.type.toLowerCase());
+                    return ageMatch && skillMatch;
+                });
+
+                if (filteredGames.length > 0) {
+                    filteredGames.slice(0, 6).forEach(game => {
+                        const gameCard = document.createElement('div');
+                        gameCard.className = 'game-card';
+
+                        let carouselItems = game.imageUrls.length > 0
+                            ? game.imageUrls.map((url, imgIndex) => `
+                                                <div class="carousel-item ${imgIndex === 0 ? 'active' : ''}">
+                                                    <img src="${url.trim()}" alt="${game.name} Image ${imgIndex + 1}" loading="lazy">
+                                                </div>
+                                            `).join('')
+                            : `<div class="carousel-item active">
+                                                <img src="https://via.placeholder.com/300x200?text=لا+توجد+صور" alt="No Image Available" loading="lazy">
+                                            </div>`;
+
+                        gameCard.innerHTML = `
+                                            <div class="game-image-container">
+                                                <div id="carousel-recommend-${game.id}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                                                    <div class="carousel-inner">
+                                                        ${carouselItems}
+                                                    </div>
+                                                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-recommend-${game.id}" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Previous</span>
+                                                    </button>
+                                                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-recommend-${game.id}" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Next</span>
+                                                    </button>
+                                                </div>
+                                                ${game.isRejected ? `<span class="stock-badge out-of-stock">نفذت الكمية</span>` : ''}
+                                            </div>
+                                            <div class="game-header">
+                                                <div class="game-title-row">
+                                                    <h3 class="game-title">${game.name}</h3>
+                                                    <span class="age-badge">${game.age}</span>
+                                                </div>
+                                                <a href="/Tickets/Details/${game.id}" class="video-btn">عرض التفاصيل</a>
+                                            </div>
+                                            <div class="game-footer">
+                                                <div class="game-price">
+                                                    <span class="current-price">${game.price} جنيه</span>
+                                                </div>
+                                                <a href="javascript:void(0);" class="add-to-cart cart-btn" data-id="${game.id}">
+                                                    ${game.isRejected ? `<span>نفذت الكمية</span>` : game.isPurchased ? `<span>تم الشراء</span>` : game.isInCart ? `<span>✅ تمت الإضافة</span>` : `<span>أضف للسلة</span>`}
+                                                </a>
+                                            </div>
+                                        `;
+                        recommendationsGrid.appendChild(gameCard);
+                    });
+
+                    document.querySelectorAll('#recommendationsGrid .cart-btn').forEach(button => {
+                        button.addEventListener('click', function () {
+                            let ticketId = this.getAttribute('data-id');
+                            let buttonText = this;
+
+                            if (buttonText.innerText.includes('نفذت الكمية') || buttonText.innerText.includes('تم الشراء')) {
+                                alert('⚠️ لا يمكنك إضافة هذه اللعبة إلى السلة.');
+                                return;
+                            }
+
+                            if (!isAuthenticated) {
+                                alert('يرجى تسجيل الدخول لإضافة اللعبة إلى السلة.');
+                                window.location.href = `/Account/Login?returnUrl=${encodeURIComponent(`/Tickets/AddToCart/${ticketId}`)}`;
+                                return;
+                            }
+
+                            fetch(`/Tickets/AddToCart/${ticketId}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        buttonText.innerHTML = '✅ تمت الإضافة';
+                                        const cartCount = document.querySelector('.cart-count');
+                                        if (cartCount) {
+                                            cartCount.textContent = Number.parseInt(cartCount.textContent) + 1;
+                                        }
+                                    } else {
+                                        alert('⚠️ ' + data.message);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('❌ حدث خطأ، يرجى المحاولة مرة أخرى.');
+                                });
+                        });
+                    });
+                } else {
+                    recommendationsGrid.innerHTML = `
+                                        <div class="no-results">
+                                            <div class="search-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+                                            <h3>لم نجد ألعاباً مطابقة</h3>
+                                            <p>يرجى تغيير معايير البحث والمحاولة مرة أخرى</p>
+                                        </div>
+                                    `;
+                }
+            }
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        if (navLinks && navLinks.classList.contains('active')) {
+                            navLinks.classList.remove('active');
+                            if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+                        }
+                    }
+                });
+            });
+
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const submitBtn = this.querySelector('.submit-btn');
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<div class="loading-spinner"></div> جاري الإرسال...';
+                    submitBtn.disabled = true;
+
+                    setTimeout(() => {
+                        alert('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+                        this.reset();
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

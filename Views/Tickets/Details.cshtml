@@ -1,0 +1,135 @@
+﻿@model My_ticket.Models.Ticket
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-img {
+            border-radius: 15px;
+            object-fit: cover;
+            width: 95%; 
+            display: block;
+            margin: 0 auto;
+        }
+
+        .previews img {
+            cursor: pointer;
+            border-radius: 10px;
+            transition: transform 0.3s;
+            width: 100%;
+        }
+
+            .previews img:hover {
+                transform: scale(1.1);
+            }
+
+        .custom-btn {
+            border-radius: 10px;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row d-flex align-items-center">
+            <div class="col-md-6 text-center">
+                <img id="mainImg" class="img-fluid main-img" src="@Model.ImageUrl" alt="Ticket Image">
+                <div class="row my-3 previews">
+                    <div class="col-4">
+                        <img class="img-fluid" src="@Model.Image1" alt="Preview 1" onclick="swapImage(this)">
+                    </div>
+                    <div class="col-4">
+                        <img class="img-fluid" src="@Model.Image2" alt="Preview 2" onclick="swapImage(this)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h2 class="text-primary">@Model.Name</h2>
+                <div>
+                    <span class="h4 text-danger">@Model.Price EGP</span>
+                </div>
+                <div class="my-3">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= Model.Rating)
+                        {
+                            <i class="bi bi-star-fill text-warning"></i>
+                        }
+                        else if (i - 0.5 == Model.Rating)
+                        {
+                            <i class="bi bi-star-half text-warning"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-star text-secondary"></i>
+                        }
+                    }
+                </div>
+
+                <p>@Model.Details</p>
+
+                <button class="btn btn-primary btn-lg mb-3 me-2 add-to-cart-btn"
+                        data-id="@Model.Id">
+                    <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+
+                <p id="cart-message" class="text-success mt-2" style="display: none;">✅ تمت الإضافة إلى عربة المشتريات!</p>
+
+                <div class="mt-4">
+                    <h5>Key Features:</h5>
+                    <ul>
+                        <li>@Model.Type</li>
+                        <li>مناسب لعمر @Model.Age</li>
+                        <li>@Model.Details</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function swapImage(preview) {
+            document.getElementById('mainImg').src = preview.src;
+        }
+    </script>
+    <script>
+        document.querySelector(".add-to-cart-btn").addEventListener("click", function () {
+            let ticketId = this.getAttribute("data-id");
+            let cartMessage = document.getElementById("cart-message");
+
+            fetch(`/Tickets/AddToCart/${ticketId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        cartMessage.style.display = "block";
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("❌ خطأ:", error);
+                });
+        });
+    </script>
+
+</body>
+</html>

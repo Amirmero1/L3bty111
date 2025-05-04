@@ -1,0 +1,625 @@
+﻿@model List<My_ticket.Models.Ticket>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<div class="text-center">
+    <style>
+        /* تحسين الخلفية العامة */
+        body {
+            background: linear-gradient(135deg, #ffebef, #d6f0fa); /* تدرج لوني مبهج */
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(3px);
+            z-index: -1;
+        }
+
+        /* تحسين العناوين */
+        h1, h2 {
+            color: #ff6b6b;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        /* تحسين حقل البحث */
+        #searchBox {
+            width: 50%;
+            margin: auto;
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            border: 2px solid #ff6b6b;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        #searchBox:focus {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+            background: #fff;
+            outline: none;
+        }
+
+        #searchBox::placeholder {
+            color: #ff8c94;
+            font-weight: lighter;
+        }
+
+        /* تحسين قسم Shop by Type */
+        .form-select {
+            padding: 10px 20px;
+            border: 2px solid #ff6b6b;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-select:hover {
+            background: linear-gradient(90deg, #ffebef, #e6f9f6);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-select:focus {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+            outline: none;
+        }
+
+        /* تحسين قسم Shop by Age (الكاروسيل) */
+        .age-img {
+            width: 200px !important;
+            height: 200px !important;
+            margin: 10px;
+            border-radius: 15px;
+            transition: all 0.3s ease-in-out, box-shadow 0.5s ease-in-out;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .age-img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            filter: brightness(1.2);
+        }
+
+        .selected-age {
+            border: 4px solid #ff6b6b !important;
+            transform: scale(1.15) rotate(3deg);
+            box-shadow: 0 0 25px rgba(255, 107, 107, 0.7);
+            transition: all 0.4s ease-in-out;
+        }
+
+        .age-img:not(.selected-age) {
+            transform: scale(1) rotate(0deg);
+            box-shadow: none;
+        }
+
+        /* إضافة نصوص توضيحية أسفل الصور */
+        .age-label {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 107, 107, 0.8);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .age-img:hover .age-label {
+            opacity: 1;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: #ff6b6b;
+            border-radius: 50%;
+            padding: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-control-prev-icon:hover,
+        .carousel-control-next-icon:hover {
+            background-color: #4ecdc4;
+        }
+
+        #ageCarousel .carousel-item img {
+            width: 200px !important;
+            height: 200px !important;
+            margin: auto;
+        }
+
+        /* تحسين معرض الألعاب (Game Gallery) */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .game {
+            margin: 10px;
+            padding: 15px;
+            width: 250px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .game:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .game .carousel-inner {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .game .carousel-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .game:hover .carousel-item img {
+            transform: scale(1.1);
+        }
+
+        .img-details-container {
+            padding: 15px;
+            background: linear-gradient(135deg, #ffebef, #e6f9f6);
+            border-radius: 0 0 15px 15px;
+        }
+
+        .game a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .game h2 {
+            margin: 10px 0 5px;
+            font-size: 1.1rem;
+            color: #ff6b6b;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .game p {
+            margin: 0;
+            color: #777;
+            font-size: 0.9rem;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.3s ease;
+        }
+
+        .game .rating {
+            color: #ffc107;
+            margin: 5px 0;
+        }
+
+        .game:hover h2,
+        .game:hover p {
+            color: #4ecdc4;
+        }
+
+        .details-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 107, 107, 0.8);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game:hover .details-overlay {
+            opacity: 1;
+        }
+
+        .price-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .price-container p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        /* تحسين زر إضافة إلى السلة */
+        .cart-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .cart-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            padding: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .cart-container:hover .cart-icon {
+            background: linear-gradient(90deg, #ff6b6b, #ff8c94);
+            transform: scale(1.1);
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .cart-container:hover .cart-text {
+            opacity: 1;
+        }
+
+        .cart-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: #fff;
+            background: rgba(78, 205, 196, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* تحسين التصميم على الشاشات الصغيرة */
+        media (max-width: 768px) {
+            #searchBox {
+                width: 80%;
+            }
+
+            .age-img {
+                width: 150px !important;
+                height: 150px !important;
+            }
+
+            .game {
+                width: 200px;
+            }
+
+            .game .carousel-inner {
+                height: 120px;
+            }
+
+            .game .carousel-item img {
+                height: 120px;
+            }
+
+            .form-select {
+                width: 80%;
+                margin: auto;
+            }
+        }
+    </style>
+
+    <!-- حقل البحث -->
+    <input type="text" id="searchBox" class="form-control" placeholder="🔍 ابحث عن لعبة...">
+
+    <!-- قسم Shop by Type -->
+    <div class="container text-center my-4">
+        <h2>Shop by Type</h2>
+        <select id="gameType" class="form-select">
+            <option value="all">All Types</option>
+            <option value="learning">تعليمية</option>
+            <option value="thinking">تفكير</option>
+            <option value="entertainment">ترفيهية</option>
+        </select>
+    </div>
+
+    <!-- قسم Shop by Age -->
+    <div class="container text-center my-4">
+        <h2>Shop by Age</h2>
+        <div id="ageCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="d-flex justify-content-center">
+                        <div class="position-relative">
+                            <img src="~/css/a.jpg" alt="0-1" class="age-img">
+                            <span class="age-label">0-1 سنة</span>
+                        </div>
+                        <div class="position-relative">
+                            <img src="~/css/aa.jpg" alt="1-2" class="age-img">
+                            <span class="age-label">1-2 سنة</span>
+                        </div>
+                        <div class="position-relative">
+                            <img src="~/css/aaa.jpg" alt="2-3" class="age-img">
+                            <span class="age-label">2-3 سنوات</span>
+                        </div>
+                        <div class="position-relative">
+                            <img src="~/css/aaaa.jpg" alt="3-5" class="age-img">
+                            <span class="age-label">3-5 سنوات</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex justify-content-center">
+                        <div class="position-relative">
+                            <img src="~/css/aaaaa.jpg" alt="5-8" class="age-img">
+                            <span class="age-label">5-8 سنوات</span>
+                        </div>
+                        <div class="position-relative">
+                            <img src="~/css/aaaaaaa.jpg" alt="8" class="age-img">
+                            <span class="age-label">8+ سنوات</span>
+                        </div>
+                        <div class="position-relative">
+                            <img src="~/css/aaaaaa.jpg" alt="adults" class="age-img">
+                            <span class="age-label">الكبار</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#ageCarousel" data-bs-slide="prev" style="left: -8%;">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#ageCarousel" data-bs-slide="next" style="right: -8%;">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- معرض الألعاب -->
+    <h1>Game Gallery</h1>
+    <div class="gallery" id="gameGallery">
+        @foreach (var ticket in Model)
+        {
+            var ageCategory = ticket.Age;
+            var gameType = ticket.Type;
+            <div class="game" data-category="@ageCategory" data-type="@gameType">
+                <a href="/Tickets/Details/@ticket.Id">
+                    <div class="img-details-container">
+                        <div id="carousel-@ticket.Id" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="@ticket.ImageUrl" alt="@ticket.Name">
+                                    <span class="details-overlay">عرض التفاصيل</span>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="@ticket.Image1" alt="@ticket.Name">
+                                    <span class="details-overlay">عرض التفاصيل</span>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="@ticket.Image2" alt="@ticket.Name">
+                                    <span class="details-overlay">عرض التفاصيل</span>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@ticket.Id" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carousel-@ticket.Id" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <h2>@ticket.Name</h2>
+                        <div class="rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= ticket.Rating)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                }
+                                else
+                                {
+                                    <i class="far fa-star text-warning"></i>
+                                }
+                            }
+                        </div>
+                        <p>@ticket.Details</p>
+                        <a href="/Tickets/Details/@ticket.Id" class="btn btn-link" style="color: #ff6b6b;">عرض المزيد</a>
+                    </div>
+                </a>
+                <div class="price-container">
+                    <p>@ticket.Price EGP</p>
+                    <a href="javascript:void(0);" class="cart-container cart-btn" data-id="@ticket.Id" data-incart="@ticket.IsInCart">
+                        <img src="~/css/shoping.jpg" alt="Add to Cart" class="cart-icon">
+                        @{
+                            var utsList = ViewBag.UTS as List<UT>;
+                            var utsRecord = utsList?.FirstOrDefault(u => u.TicketId == ticket.Id);
+                            var cartList = ViewBag.Cart as List<Ticket>;
+                            var inCart = cartList?.Any(c => c.Id == ticket.Id) ?? false;
+                            var currentUserId = ViewBag.CurrentUserId;
+                        }
+                        <span class="cart-text">
+                            @if (!string.IsNullOrEmpty(currentUserId) && utsRecord != null && utsRecord.UserId == int.Parse(currentUserId))
+                            {
+                                if (utsRecord.IsRejected)
+                                {
+                                    <span style="color: white;">❌ اللعبة غير متوفرة</span>
+                                }
+                                else if (utsRecord.IsPurchased)
+                                {
+                                    <span style="color: white;">🚚 اللعبة في طريقها إليك</span>
+                                }
+                                else if (inCart)
+                                {
+                                    <span style="color: white;">✅ تمت الإضافة</span>
+                                }
+                                else
+                                {
+                                    <span>إضافة إلى عربة التسوق</span>
+                                }
+                            }
+                            else if (inCart)
+                            {
+                                <span style="color: white;">✅ تمت الإضافة</span>
+                            }
+                            else
+                            {
+                                <span>إضافة إلى عربة التسوق</span>
+                            }
+                        </span>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // فلترة الألعاب بناءً على الفئة العمرية
+        document.querySelectorAll("#ageCarousel .carousel-item img").forEach(img => {
+            img.addEventListener("click", function () {
+                if (this.classList.contains("selected-age")) {
+                    this.classList.remove("selected-age");
+                    filterGames("all");
+                } else {
+                    document.querySelectorAll("#ageCarousel .carousel-item img").forEach(img => {
+                        img.classList.remove("selected-age");
+                    });
+                    this.classList.add("selected-age");
+                    var selectedCategory = this.alt.trim();
+                    filterGames(selectedCategory);
+                }
+            });
+        });
+
+        // دالة الفلترة
+        function filterGames() {
+            let selectedCategory = document.querySelector(".selected-age")?.alt.trim() || "all";
+            let selectedType = document.getElementById("gameType").value;
+            let searchValue = document.getElementById("searchBox").value.toLowerCase();
+
+            document.querySelectorAll(".game").forEach(game => {
+                let gameCategory = game.dataset.category;
+                let gameType = game.dataset.type;
+                let gameName = game.querySelector("h2").innerText.toLowerCase();
+
+                let categoryMatch = (selectedCategory === "all" || gameCategory === selectedCategory);
+                let typeMatch = (selectedType === "all" || gameType === selectedType);
+                let searchMatch = gameName.includes(searchValue);
+
+                game.style.display = (categoryMatch && typeMatch && searchMatch) ? "block" : "none";
+            });
+        }
+
+        // استدعاء الفلترة عند تغيير أي خيار
+        document.getElementById("gameType").addEventListener("change", filterGames);
+        document.getElementById("searchBox").addEventListener("keyup", filterGames);
+        document.querySelectorAll("#ageCarousel .carousel-item img").forEach(img => {
+            img.addEventListener("click", filterGames);
+        });
+
+        // حذف عنصر من السلة
+        document.querySelectorAll('.remove-ticket').forEach(button => {
+            button.addEventListener('click', function () {
+                let ticketId = this.getAttribute('data-id');
+                let ticketElement = document.getElementById(`ticket-${ticketId}`);
+
+                ticketElement.style.opacity = "0";
+                setTimeout(() => ticketElement.remove(), 300);
+
+                fetch(`/Tickets/RemoveFromCart/${ticketId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            alert("حدث خطأ أثناء الحذف، يرجى المحاولة مرة أخرى.");
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("تم الحذف");
+                        location.reload();
+                    });
+            });
+        });
+
+        // إضافة إلى السلة
+        const isAuthenticated = @Html.Raw(Json.Serialize(User.Identity?.IsAuthenticated ?? false));
+        if (!isAuthenticated) {
+            document.querySelectorAll('.cart-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    let ticketId = this.getAttribute('data-id');
+                    let cartTextElement = this.querySelector('.cart-text');
+
+                    if (cartTextElement.innerText.includes("❌") || cartTextElement.innerText.includes("🚚")) {
+                        alert("⚠️ لا يمكنك إضافة هذه اللعبة إلى السلة.");
+                        return;
+                    }
+
+                    fetch(`/Tickets/AddToCart/${ticketId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                cartTextElement.innerHTML = "✅ تمت الإضافة";
+                            } else {
+                                alert("⚠️ " + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("قم بتسجيل الدخول أولاً");
+                        });
+                });
+            });
+        }
+    </script>
+</div>

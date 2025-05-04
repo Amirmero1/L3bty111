@@ -1,0 +1,265 @@
+﻿@{
+    ViewData["Title"] = "سياسات الإرجاع والاستبدال";
+}
+
+<style>
+    /* Reset and General Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Cairo', sans-serif;
+        background: linear-gradient(135deg, #ffebef, #d6f0fa);
+        color: #333;
+        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 5rem auto;
+        padding: 0 15px;
+    }
+
+    /* Policy Section */
+    .policy-section {
+        padding: 3rem 0;
+        background: linear-gradient(135deg, #ff8c94, #4ecdc4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .policy-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+        animation: wave 10s linear infinite;
+    }
+
+    keyframes wave {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-1440px); }
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        color: #fff;
+        text-align: center;
+        margin-bottom: 1rem;
+        position: relative;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        animation: fadeInDown 1s ease;
+    }
+
+    keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: #ffebef;
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fadeInUp 1s ease 0.5s forwards;
+        opacity: 0;
+    }
+
+    keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Policy Card */
+    .policy-card {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeIn 1s ease;
+    }
+
+    .policy-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .policy-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .policy-card .return-policy h3 {
+        color: #ff6b6b;
+    }
+
+    .policy-card .exchange-policy h3 {
+        color: #4ecdc4;
+    }
+
+    .policy-card .general-terms h3 {
+        color: #ff8c94;
+    }
+
+    .policy-card .request-process h3 {
+        color: #ffc107;
+    }
+
+    .policy-card .support h3 {
+        color: #ff6b6b;
+    }
+
+    .policy-card p {
+        font-size: 1rem;
+        color: #777;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .policy-card ul, .policy-card ol {
+        padding-right: 1rem;
+    }
+
+    .policy-card .list-group-item {
+        background: transparent;
+        border: none;
+        font-size: 1rem;
+        color: #777;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 0;
+        animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .policy-card .list-group-item:nth-child(1) { animation-delay: 0.2s; }
+    .policy-card .list-group-item:nth-child(2) { animation-delay: 0.4s; }
+    .policy-card .list-group-item:nth-child(3) { animation-delay: 0.6s; }
+    .policy-card .list-group-item:nth-child(4) { animation-delay: 0.8s; }
+
+    .policy-card i {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .policy-card .list-group-item:hover i {
+        transform: scale(1.2);
+    }
+
+    .policy-card a {
+        color: #4ecdc4;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .policy-card a:hover {
+        color: #ff6b6b;
+    }
+
+    /* Responsive Design */
+    media (max-width: 768px) {
+        .section-title {
+            font-size: 2rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+        }
+
+        .policy-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
+
+<section class="policy-section">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="section-title">📜 سياسات الإرجاع والاستبدال</h2>
+            <p class="section-subtitle">آخر تحديث: مارس 2025</p>
+        </div>
+
+        <div class="policy-card">
+            <div class="return-policy">
+                <h3><i class="fas fa-undo-alt"></i> سياسة الإرجاع</h3>
+                <p>
+                    نحن نسعى لضمان رضاك التام عن كل عملية شراء من متجرنا. إذا كنت غير راضٍ عن اللعبة التي اشتريتها،
+                    يمكنك طلب إرجاعها وفقًا للشروط التالية:
+                </p>
+                <ul class="list-group mb-4">
+                    <li class="list-group-item">⏳ يمكنك طلب الإرجاع خلال <strong>14 يومًا</strong> من تاريخ الشراء.</li>
+                    <li class="list-group-item">📧 يجب أن تقدم <strong>إثبات الشراء</strong> (رقم الطلب أو الإيصال الإلكتروني).</li>
+                    <li class="list-group-item">🚫 لا يمكن إرجاع اللعبة التي تم استخدامها بالفعل.</li>
+                    <li class="list-group-item">⚠️ قد يتم فرض <strong>رسوم معالجة</strong> على بعض عمليات الإرجاع.</li>
+                </ul>
+            </div>
+
+            <div class="exchange-policy">
+                <h3><i class="fas fa-exchange-alt"></i> سياسة الاستبدال</h3>
+                <p>
+                    إذا كنت ترغب في استبدال لعبتك بأخرى، يمكنك القيام بذلك وفقًا للشروط التالية:
+                </p>
+                <ul class="list-group mb-4">
+                    <li class="list-group-item">🔄 الاستبدال مسموح به خلال <strong>30 يومًا</strong> من تاريخ الشراء.</li>
+                    <li class="list-group-item">🎟️ يجب أن تكون اللعبة في <strong>حالتها الأصلية</strong> ولم يتم استخدامها.</li>
+                    <li class="list-group-item">💰 يمكن دفع فرق السعر إذا كنت ترغب في ترقية اللعبة.</li>
+                    <li class="list-group-item">🚀 يتم تنفيذ الاستبدال خلال <strong>3 أيام عمل</strong> من تاريخ الطلب.</li>
+                </ul>
+            </div>
+
+            <div class="general-terms">
+                <h3><i class="fas fa-exclamation-circle"></i> الشروط العامة</h3>
+                <p>
+                    قبل طلب الإرجاع أو الاستبدال، يُرجى قراءة هذه الشروط الإضافية:
+                </p>
+                <ul class="list-group mb-4">
+                    <li class="list-group-item">🔹 يجب تقديم الطلب من خلال البريد الإلكتروني أو حسابك الشخصي.</li>
+                    <li class="list-group-item">📍 قد تختلف السياسات بناءً على نوع اللعبة أو العرض الخاص.</li>
+                    <li class="list-group-item">⚠️ في بعض الحالات، قد لا يكون الإرجاع متاحًا بسبب طبيعة الحدث أو العرض الترويجي.</li>
+                </ul>
+            </div>
+
+            <div class="request-process">
+                <h3><i class="fas fa-envelope"></i> كيفية طلب الإرجاع أو الاستبدال</h3>
+                <p>لإجراء عملية الإرجاع أو الاستبدال، يرجى اتباع الخطوات التالية:</p>
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item">📧 تواصل معنا عبر البريد الإلكتروني: <a href="mailto:support@L3bty.com">support@L3bty.com</a></li>
+                    <li class="list-group-item">📎 قم بإرفاق رقم الطلب وصورة من اللعبة.</li>
+                    <li class="list-group-item">📤 انتظر تأكيد طلبك من خدمة العملاء خلال 24 ساعة.</li>
+                    <li class="list-group-item">🔄 في حالة الاستبدال، اختر اللعبة البديلة التي ترغب بها.</li>
+                </ol>
+            </div>
+
+            <div class="support">
+                <h3><i class="fas fa-headset"></i> الدعم الفني</h3>
+                <p>
+                    إذا كان لديك أي استفسارات أخرى، يمكنك التواصل معنا على مدار الساعة عبر:
+                </p>
+                <ul class="list-group mb-4">
+                    <li class="list-group-item">📞 رقم الهاتف: <strong>+127 644 8414</strong></li>
+                    <li class="list-group-item">💬 الدردشة المباشرة عبر الموقع.</li>
+                    <li class="list-group-item">📧 البريد الإلكتروني: <a href="mailto:support@L3bty.com">support@L3bty.com</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- تضمين Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

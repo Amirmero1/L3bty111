@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA8lnEmWvqREa5B8d0mwT9DQAAAAACAAAAAAAQZgAAAAEAACAAAADw21SvN0DFpW5PnBwXPkkthIJPJcKnSWSyEZVCsCf6bwAAAAAOgAAAAAIAACAAAADubzcKyRfPcofBALbL6w6D4lccHR+tfT9rTnd1tV/RZyAAAABidwt/xVSe+cPYfTqAkiQibkHnhI22KHnI3DMesjJYiEAAAABzM2Dfm3PDfaSSkIq3xyvx8st0P3Xg2hEh29oBiLqJ/SWVVjlHZQKWuHzYenJPDczyfE2ysURnAU/dW0GI/07N</EncryptedPassword>
+    <_PublishTargetUrl>ftp://L3bty.somee.com/www.L3bty.somee.com</_PublishTargetUrl>
+    <History>False|2025-03-27T12:24:52.8291073Z||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="appsettings.Development.json">
+      <publishTime>09/05/2024 16:53:42</publishTime>
+    </File>
+    <File Include="appsettings.json">
+      <publishTime>03/27/2025 12:53:16</publishTime>
+    </File>
+    <File Include="Azure.Core.dll">
+      <publishTime>09/07/2023 20:50:30</publishTime>
+    </File>
+    <File Include="Azure.Identity.dll">
+      <publishTime>10/18/2023 22:59:42</publishTime>
+    </File>
+    <File Include="BCrypt.Net-Next.dll">
+      <publishTime>03/03/2022 18:10:20</publishTime>
+    </File>
+    <File Include="Microsoft.AspNetCore.Authentication.Facebook.dll">
+      <publishTime>06/03/2023 03:35:06</publishTime>
+    </File>
+    <File Include="Microsoft.AspNetCore.Authentication.Google.dll">
+      <publishTime>06/03/2023 03:35:06</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

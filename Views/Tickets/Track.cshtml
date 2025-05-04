@@ -1,0 +1,93 @@
+﻿@model List<My_ticket.Models.UT>
+
+<section class="vh-100 gradient-custom-2">
+    <div class="container-fluid py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+                <div class="text-center mb-4">
+                    <h1 class="fw-bold display-4">📦 تتبع طلباتك</h1>
+                </div>
+
+                <div class="card-body p-4">
+                    @if (Model.Any())
+                    {
+                        decimal totalAmount = 0;
+                        bool hasValidOrders = false;
+
+                        @foreach (var order in Model)
+                        {
+                            decimal orderTotal = (decimal)order.Ticket.Price * order.Quantity;
+
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="fw-bold">@order.Ticket.Name</h5>
+                                    <p class="text-muted">Qt: @order.Quantity</p>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="text-danger">@order.Ticket.Price EGP</h4>
+                                    <img class="img-fluid" src="@order.Ticket.ImageUrl" width="100" alt="Ticket Image">
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <h6 class="text-muted">Total: @orderTotal EGP</h6>
+                                </div>
+
+                                @if (order.IsRejected)
+                                {
+                                    <div class="alert alert-danger text-center mt-2">
+                                        🚨 ناسف، اللعبة غير متوفرة.
+                                    </div>
+                                }
+                                else if (order.IsPurchased)
+                                {
+                                    <div class="alert alert-success text-center mt-2">
+                                        ✅ الطلب الخاص بـك في طريقه إليك! 🚚
+                                    </div>
+                                    totalAmount += orderTotal;
+                                    hasValidOrders = true;
+                                }
+                                else
+                                {
+                                    hasValidOrders = true;
+                                    totalAmount += orderTotal;
+
+                                    <div class="alert alert-warning text-center mt-2">
+                                        ⏳ طلبك قيد المراجعة، برجاء الانتظار حتى يتم التأكيد أو الرفض
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                        @if (hasValidOrders)
+                        {
+                            <div class="text-center mt-4">
+                                <h5 class="fw-bold text-primary">💰 Total: @totalAmount EGP</h5>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning text-center mt-4">
+                                ⚠️ لا توجد طلبات متاحة للدفع.
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-center text-muted fw-bold mt-3">🚫 لا توجد طلبات حتى الآن.</p>
+                        <div class="text-center mt-3">
+                            <a href="/Tickets/Index" class="btn btn-primary">تصفح الألعاب</a>
+                        </div>
+                    }
+                </div>
+
+                <div class="card-footer p-4 text-center">
+                    <a href="/Tickets/My_Tickets" class="btn btn-danger px-4 py-2 fw-bold" style="border-radius: 8px;">
+                        Cancel
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
